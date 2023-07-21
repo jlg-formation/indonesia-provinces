@@ -46,8 +46,9 @@ import { queryData } from "./query";
 
   const data = popJson.map((row: any) => ({
     name: row.code,
-    value: row.population,
+    value: +(row.population / row.surface).toFixed(0),
     label: row.label,
+    population: row.population,
   }));
 
   const projection = d3.geoMercator();
@@ -55,7 +56,7 @@ import { queryData } from "./query";
   myChart.hideLoading();
 
   echarts.registerMap("Indonesia", indonesiaGeoJson);
-  const option = {
+  const option: echarts.EChartsOption = {
     title: {
       text: "Indonesia Population Estimates",
       subtext: "Data from wikidata.org",
@@ -69,7 +70,8 @@ import { queryData } from "./query";
         return `
 <div class="tooltip">
   <span>${params.data.label}</span>
-  <span><b>${params.data.value} hab.</b></span>
+  <span><b>${params.data.population} hab.</b></span>
+  <span>${params.data.value} hab./km2</span>
 </div>        
         `;
       },
@@ -77,10 +79,10 @@ import { queryData } from "./query";
     visualMap: {
       left: "left",
       min: 0,
-      max: 49000000,
+      max: 1000,
       inRange: {
         color: [
-          "hsl(240, 100%, 95%)",
+          "hsl(240, 100%, 98%)",
           "hsl(240, 100%, 90%)",
           "hsl(240, 100%, 85%)",
           "hsl(240, 100%, 80%)",
@@ -109,22 +111,26 @@ import { queryData } from "./query";
         name: "Indonesia population",
         type: "map",
         map: "Indonesia",
+        roam: true,
         zoom: 1.1,
         nameProperty: "shapeISO",
-        projection: {
-          project: function (point: [number, number]) {
-            return projection(point);
-          },
-          unproject: function (point: [number, number]) {
-            if (projection.invert) {
-              return projection.invert(point);
-            }
-            return point;
-          },
-        },
+        // projection: {
+        //   project: function (point: [number, number]) {
+        //     return projection(point);
+        //   },
+        //   unproject: function (point: [number, number]) {
+        //     if (projection.invert) {
+        //       return projection.invert(point);
+        //     }
+        //     return point;
+        //   },
+        // },
         emphasis: {
           label: {
             show: false,
+          },
+          itemStyle: {
+            areaColor: "hsl(120, 100%, 35%)",
           },
         },
         data: data,
