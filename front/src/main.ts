@@ -1,6 +1,6 @@
 import "./style.css";
 import * as echarts from "echarts";
-import * as d3 from "d3";
+// import * as d3 from "d3";
 import { queryData } from "./query";
 
 (async () => {
@@ -51,7 +51,7 @@ import { queryData } from "./query";
     population: row.population,
   }));
 
-  const projection = d3.geoMercator();
+  // const projection = d3.geoMercator();
 
   myChart.hideLoading();
 
