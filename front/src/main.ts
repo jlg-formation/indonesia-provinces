@@ -27,4 +27,17 @@ import { queryData } from "./query";
 
   const populationJson = await queryData(wikidataRequest);
   console.log("populationJson: ", populationJson);
+
+  const results = populationJson.results.bindings;
+  console.log("results: ", results);
+
+  const popJson = results.map((row: any) => {
+    return {
+      code: row.code.value,
+      surface: row.surface.value,
+      population: row.population.value,
+      label: row.itemLabel.value,
+    };
+  });
+  console.log("popJson: ", popJson);
 })();
