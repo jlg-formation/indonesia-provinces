@@ -44,6 +44,11 @@ import { queryData } from "./query";
   });
   console.log("popJson: ", popJson);
 
+  const data = popJson.map((row: any) => ({
+    name: row.code,
+    value: row.population,
+  }));
+
   const projection = d3.geoMercator();
 
   myChart.hideLoading();
@@ -96,10 +101,11 @@ import { queryData } from "./query";
     },
     series: [
       {
-        name: "USA PopEstimates",
+        name: "Indonesia population",
         type: "map",
         map: "Indonesia",
-        zoom: 1,
+        zoom: 1.1,
+        nameProperty: "shapeISO",
         projection: {
           project: function (point: [number, number]) {
             return projection(point);
@@ -116,7 +122,7 @@ import { queryData } from "./query";
             show: true,
           },
         },
-        data: [{ name: "truc", value: 123 }],
+        data: data,
       },
     ],
   };
