@@ -12,7 +12,7 @@ import { queryData } from "./query";
 
   myChart.showLoading();
 
-  const response = await fetch("/indonesia.geojson");
+  const response = await fetch("./indonesia.geojson");
   const indonesiaGeoJson = await response.json();
 
   const wikidataRequest = `
