@@ -4,6 +4,7 @@ export default defineConfig(() => {
   return {
     build: {
       outDir: "../docs",
+      emptyOutDir: true,
     },
   };
 });

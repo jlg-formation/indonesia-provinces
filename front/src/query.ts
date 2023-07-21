@@ -4,6 +4,6 @@ export const queryData = async (query: string) => {
   )}`;
   const response = await fetch(endpoint);
   const json = await response.json();
-  console.log("json", json);
+
   return json;
 };

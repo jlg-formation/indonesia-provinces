@@ -9,13 +9,11 @@ import { queryData } from "./query";
     throw new Error("Cannot find div.map");
   }
   const myChart = echarts.init(chartDom);
-  console.log("myChart: ", myChart);
 
   myChart.showLoading();
 
   const response = await fetch("/indonesia.geojson");
   const indonesiaGeoJson = await response.json();
-  console.log("indonesiaGeoJson: ", indonesiaGeoJson);
 
   const wikidataRequest = `
   SELECT ?item ?itemLabel ?population ?code ?surface  {
@@ -26,13 +24,10 @@ import { queryData } from "./query";
     SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en" }
   } ORDER BY DESC(?item)
   `;
-  console.log("wikidataRequest: ", wikidataRequest);
 
   const populationJson = await queryData(wikidataRequest);
-  console.log("populationJson: ", populationJson);
 
   const results = populationJson.results.bindings;
-  console.log("results: ", results);
 
   const popJson = results.map((row: any) => {
     return {
@@ -42,7 +37,6 @@ import { queryData } from "./query";
       label: row.itemLabel.value,
     };
   });
-  console.log("popJson: ", popJson);
 
   const data = popJson.map((row: any) => ({
     name: row.code,
@@ -65,8 +59,6 @@ import { queryData } from "./query";
     },
     tooltip: {
       formatter: function (params: any) {
-        console.log("params: ", params);
-
         return `
 <div class="tooltip">
   <span>${params.data.label}</span>
