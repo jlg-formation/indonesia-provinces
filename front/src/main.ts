@@ -34,8 +34,8 @@ import { queryData } from "./query";
   const popJson = results.map((row: any) => {
     return {
       code: row.code.value,
-      surface: row.surface.value,
-      population: row.population.value,
+      surface: +row.surface.value,
+      population: +row.population.value,
       label: row.itemLabel.value,
     };
   });
