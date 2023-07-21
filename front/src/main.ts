@@ -47,6 +47,7 @@ import { queryData } from "./query";
   const data = popJson.map((row: any) => ({
     name: row.code,
     value: row.population,
+    label: row.label,
   }));
 
   const projection = d3.geoMercator();
@@ -62,27 +63,31 @@ import { queryData } from "./query";
       left: "right",
     },
     tooltip: {
-      trigger: "item",
-      showDelay: 0,
-      transitionDuration: 0.2,
+      formatter: function (params: any) {
+        console.log("params: ", params);
+
+        return `
+<div class="tooltip">
+  <span>${params.data.label}</span>
+  <span><b>${params.data.value} hab.</b></span>
+</div>        
+        `;
+      },
     },
     visualMap: {
-      left: "right",
-      min: 500000,
-      max: 38000000,
+      left: "left",
+      min: 0,
+      max: 49000000,
       inRange: {
         color: [
-          "#313695",
-          "#4575b4",
-          "#74add1",
-          "#abd9e9",
-          "#e0f3f8",
-          "#ffffbf",
-          "#fee090",
-          "#fdae61",
-          "#f46d43",
-          "#d73027",
-          "#a50026",
+          "hsl(240, 100%, 95%)",
+          "hsl(240, 100%, 90%)",
+          "hsl(240, 100%, 85%)",
+          "hsl(240, 100%, 80%)",
+          "hsl(240, 100%, 75%)",
+          "hsl(240, 100%, 70%)",
+          "hsl(240, 100%, 65%)",
+          "hsl(240, 100%, 50%)",
         ],
       },
       text: ["High", "Low"],
@@ -119,7 +124,7 @@ import { queryData } from "./query";
         },
         emphasis: {
           label: {
-            show: true,
+            show: false,
           },
         },
         data: data,
