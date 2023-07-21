@@ -6,6 +6,13 @@ https://jlg-formation.github.io/indonesia-provinces/
 
 ## Install for dev
 
+Software prerequisites:
+
+- Git
+- VSCode
+- Browser (Chrome, Safari, etc.)
+- nodejs 18+
+
 ```
 git clone https://github.com/jlg-formation/indonesia-provinces.git
 cd indonesia-provinces
