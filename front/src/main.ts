@@ -1,5 +1,6 @@
 import "./style.css";
 import * as echarts from "echarts";
+import * as d3 from "d3";
 import { queryData } from "./query";
 
 (async () => {
@@ -10,9 +11,11 @@ import { queryData } from "./query";
   const myChart = echarts.init(chartDom);
   console.log("myChart: ", myChart);
 
+  myChart.showLoading();
+
   const response = await fetch("/indonesia.geojson");
-  const json = await response.json();
-  console.log("json: ", json);
+  const indonesiaGeoJson = await response.json();
+  console.log("indonesiaGeoJson: ", indonesiaGeoJson);
 
   const wikidataRequest = `
   SELECT ?item ?itemLabel ?population ?code ?surface  {
@@ -40,4 +43,83 @@ import { queryData } from "./query";
     };
   });
   console.log("popJson: ", popJson);
+
+  const projection = d3.geoMercator();
+
+  myChart.hideLoading();
+
+  echarts.registerMap("Indonesia", indonesiaGeoJson);
+  const option = {
+    title: {
+      text: "Indonesia Population Estimates",
+      subtext: "Data from wikidata.org",
+      sublink: "https://wikidata.org",
+      left: "right",
+    },
+    tooltip: {
+      trigger: "item",
+      showDelay: 0,
+      transitionDuration: 0.2,
+    },
+    visualMap: {
+      left: "right",
+      min: 500000,
+      max: 38000000,
+      inRange: {
+        color: [
+          "#313695",
+          "#4575b4",
+          "#74add1",
+          "#abd9e9",
+          "#e0f3f8",
+          "#ffffbf",
+          "#fee090",
+          "#fdae61",
+          "#f46d43",
+          "#d73027",
+          "#a50026",
+        ],
+      },
+      text: ["High", "Low"],
+      calculable: true,
+    },
+    toolbox: {
+      show: true,
+      //orient: 'vertical',
+      left: "left",
+      top: "top",
+      feature: {
+        dataView: { readOnly: false },
+        restore: {},
+        saveAsImage: {},
+      },
+    },
+    series: [
+      {
+        name: "USA PopEstimates",
+        type: "map",
+        map: "Indonesia",
+        zoom: 1,
+        projection: {
+          project: function (point: [number, number]) {
+            return projection(point);
+          },
+          unproject: function (point: [number, number]) {
+            if (projection.invert) {
+              return projection.invert(point);
+            }
+            return point;
+          },
+        },
+        emphasis: {
+          label: {
+            show: true,
+          },
+        },
+        data: [{ name: "truc", value: 123 }],
+      },
+    ],
+  };
+
+  myChart.setOption(option);
 })();
