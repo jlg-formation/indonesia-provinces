@@ -8,4 +8,8 @@ import * as echarts from "echarts";
   }
   const myChart = echarts.init(chartDom);
   console.log("myChart: ", myChart);
+
+  const response = await fetch("/indonesia.geojson");
+  const json = await response.json();
+  console.log("json: ", json);
 })();
